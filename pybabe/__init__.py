@@ -8,6 +8,7 @@ import types
 import babelog
 import minmax
 import format_txt
+import format_json
 import twitter
 import mongo
 import dedup
@@ -20,7 +21,7 @@ import join
 # Just reference these reflective module once
 #to avoid warnings from syntax checkers
 only_to_load_1 = [transform, mapreduce, types, babelog,
-    minmax, format_txt, twitter, mongo, dedup, sql,
+    minmax, format_txt, format_json, twitter, mongo, dedup, sql,
     partition, geo, useragent, join]
 Babe = BabeBase
 StreamHeader = StreamHeader
