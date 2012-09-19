@@ -3,7 +3,7 @@ from base import BabeBase, StreamHeader, StreamFooter, StreamMeta
 
 # Load all builtin plugins
 import transform, mapreduce, types, babelog
-import minmax, format_txt, twitter, mongo, dedup, sql, partition
+import minmax, format_txt, format_json, twitter, mongo, dedup, sql, partition
 import geo, useragent, join
 
         
