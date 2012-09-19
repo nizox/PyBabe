@@ -227,19 +227,24 @@ def replace(stream, oldvalue, newvalue, column = None):
                 
 BabeBase.register('replace', replace)
 
+
 def filterColumns(stream, typename=None, remove_fields=None, keep_fields=None):
     for row in stream:
         if isinstance(row, StreamHeader):
             if keep_fields:
-                fields= keep_fields
+                fields = keep_fields
             else:
-                fields = [name for name in row.normalized_fields if not name in remove_fields] 
+                fields = [name for name in row.fields
+                        if not name in remove_fields]
             metainfo = row.replace(typename=typename, fields=fields)
+            normalized_fields = [metainfo.keynormalize(field)
+                    for field in fields]
             yield metainfo
         elif isinstance(row, StreamMeta):
             yield row
         else:
-            yield metainfo.t._make([getattr(row, k) for k in fields])
+            yield metainfo.t._make([getattr(row, k)
+                for k in normalized_fields])
 
 BabeBase.register('filterColumns', filterColumns)
 
