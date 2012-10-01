@@ -74,9 +74,9 @@ class Reducer(object):
 
     def end_group(self, t):
         if self.key:
-            elt = self.f(self.key, self.buf)
+            elt = self.f(t, self.key, self.buf)
         else:
-            elt = self.f(self.buf)
+            elt = self.f(t, self.buf)
         if isinstance(elt, t):
             return elt
         else:
