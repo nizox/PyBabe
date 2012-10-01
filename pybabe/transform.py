@@ -109,12 +109,12 @@ def replace_in_string(stream, match, replacement, field):
 BabeBase.register("replace_in_string", replace_in_string)
 
 
-def flatMap(stream, function, insert_columns=None, columns=None, name=None):
-    if insert_columns:
+def flatMap(stream, function, insert_fields=None, fields=None, typename=None):
+    if insert_fields:
         metainfo = None
         for row in stream:
             if isinstance(row, StreamHeader):
-                metainfo = row.insert(name=name, names=insert_columns)
+                metainfo = row.insert(typename=typename, fields=insert_fields)
                 yield metainfo
             elif isinstance(row, StreamMeta):
                 yield row
@@ -122,22 +122,22 @@ def flatMap(stream, function, insert_columns=None, columns=None, name=None):
                 res = function(row)
                 for r in res:
                     yield metainfo.t._make(list(row) + r)
-    elif columns:
+    elif fields:
         metainfo = None
         for row in stream:
             if isinstance(row, StreamHeader):
-                metainfo = row.replace(name=name, names=columns)
+                metainfo = row.replace(typename=typename, fields=fields)
                 yield metainfo
             elif isinstance(row, StreamMeta):
                 yield row
             else:
                 for r in function(row):
                     yield metainfo.t._make(list(r))
-    elif name:
+    elif typename:
         metainfo = None
         for row in stream:
             if isinstance(row, StreamHeader):
-                metainfo = row.augment(name=name, names=[])
+                metainfo = row.augment(typename=typename, names=[])
                 yield metainfo
             elif isinstance(row, StreamMeta):
                 yield row
