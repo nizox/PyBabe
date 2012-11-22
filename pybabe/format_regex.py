@@ -17,14 +17,20 @@ def pull(format, stream, kwargs):
     if len(regex.groupindex) == 0:
         fields = ["%i" % i for i in range(regex.groups)]
     else:
-        fields = [n for n, i in sorted(regex.items(), key=lambda x, y: y)]
+        fields = [n for n, i in sorted(regex.groupindex.items(),
+            key=lambda x: x[1])]
     metainfo = StreamHeader(fields=kwargs.get('fields', fields))
+
+    logging.debug(metainfo.fields)
+
     yield metainfo
 
     for line in stream:
         matches = regex.match(line)
         if matches is not None:
             yield metainfo.t._make(matches.groups())
+        else:
+            logging.debug("line does not match %s", line)
     yield StreamFooter()
 
 BabeBase.addPullPlugin('regex', ['txt'], pull)
